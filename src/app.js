@@ -9,7 +9,7 @@ app.use(express.json())
 
 
 //authentication route
-app.use("/api/auth",authRouter);
+app.use("/auth",authRouter);
 
 
 module.exports=app;

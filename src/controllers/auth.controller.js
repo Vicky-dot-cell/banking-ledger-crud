@@ -41,20 +41,21 @@ async function userLoginController(req,res){
     const {email,password} = req.body;
     const user = await userModel.findOne({
         email:email,
-    })
+    }).select('+password');
 
     //validating email
     if(!user){
-        res.status(404).json({
-            message: "user not found, enter valid email",
-            status: "not found"
+        return res.status(404).json({
+                    message: "user not found, enter valid email",
+                    status: "not found"
         })
     }
 
     //validating password
-    const validUser = user.methods.comparePassword(password);
+    console.log(user);
+    const validUser = user.comparePassword(password);
     if(!validUser){
-        res.status(404).json({
+        return res.status(404).json({
             message: "wrong password",
             status: "incorrect password"
         })
@@ -65,9 +66,10 @@ async function userLoginController(req,res){
     res.cookie("jwt_token",token)
     res.status(200).json({
         the_user:{
-            _id: user._id,
+            status: "you are loged in...",
             email: user.email,
             name: user.name,
+            token: token,
         }
     })
 
